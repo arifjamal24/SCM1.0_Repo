@@ -1,12 +1,62 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="base::layout(~{::section})">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="base::layout(~{::section})">
 <head>
-	<meta charset="UTF-8" />
-	<title>signup</title>
+<meta charset="UTF-8" />
+<title>signup</title>
 </head>
 <body>
-<section>
-	<h1>this is signup</h1>
+	<section>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-8 offset-md-2">
+					<div class="myCard mt-3">
+					
+					<div class="container text-center">
+					<img style="width:80px;" src="" th:src="@{/img/add-user.png}" alt="" />
+					</div>
+					
+						<h1 class="text-center">Register Here</h1>
+
+						<form th:action="@{/doRegister}" method="post">
+
+							<div class="form-group">
+								<label for="name">Full Name</label> <input type="text"
+									class="form-control" id="name" name="name"
+									placeholder="enter name" required>
+							</div>
+
+							<div class="form-group">
+								<label for="email">Email address</label> <input type="email"
+									class="form-control" id="email" name="email"
+									placeholder="xyz@mail.com" required>
+							</div>
+							<div class="form-group">
+								<label for="password">Password</label> <input type="password"
+									class="form-control" id="password" name="password"
+									placeholder="enter password" required>
+							</div>
+
+							<div class="form-group">
+								<textarea name="about" id="about" rows="6"
+									placeholder="enter something about yourself"
+									class="form-control">
+	
+	</textarea>
+							</div>
+							<div class="container text-center">
+								<button type="submit" class="btn bg-primary text-white">Submit</button>
+								<button type="reset" class="btn btn-warning">Reset</button>
+							</div>
+
+
+
+						</form>
+
+					</div>
+				</div>
+			</div>
+		</div>
 	</section>
 </body>
 </html>

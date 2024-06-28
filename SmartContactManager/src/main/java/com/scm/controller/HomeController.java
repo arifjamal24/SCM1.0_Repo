@@ -3,6 +3,7 @@ package com.scm.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,7 @@ import com.scm.entities.User;
 import com.scm.helper.Message;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 @Controller
 public class HomeController {
@@ -40,13 +42,19 @@ public class HomeController {
 	}
 	
 	@PostMapping("/doRegister")
-	public String registerUser(@ModelAttribute User user,
+	public String registerUser(@Valid @ModelAttribute User user,BindingResult result,
 			@RequestParam(value="agreement",defaultValue = "false") boolean agreement,Model model,
 			HttpSession session) {
 		try {
 			if(!agreement) {
 				System.out.println("You have not agreed terms and conditions");
-				throw new Exception("You have not agreed terms and conditions");
+				throw new Exception("\nYou have not agreed terms and conditions");
+			}
+			
+			if(result.hasErrors()){
+				System.out.println("result :"+result.toString());
+				model.addAttribute("user",user);
+				return "signup";
 			}
 			user.setRole("ROLE_USER");
 			user.setEnabled(true);
@@ -55,7 +63,7 @@ public class HomeController {
 			System.out.println("agreement: "+agreement);
 			System.out.println("model: "+user);
 			
-			User result = this.userRepository.save(user);
+			 this.userRepository.save(user);
 			
 			model.addAttribute("user", new User());
 			session.setAttribute("message", new Message("Successfully Registered !!","alert-success"));
@@ -63,7 +71,7 @@ public class HomeController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("user", user);
-			session.setAttribute("message", new Message("Something went wrong"+e.getMessage(),"alert-danger"));
+			session.setAttribute("message", new Message("Something went wrong."+e.getMessage(),"alert-danger"));
 			return "signup";
 		}
 		

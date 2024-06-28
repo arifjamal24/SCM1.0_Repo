@@ -14,8 +14,8 @@
 					<div class="myCard mt-3">
 
 						<div th:if="${session.message}"
-							th:classappend="${session.message.type}"
-							class="alert" role="alert">
+							th:classappend="${session.message.type}" class="alert"
+							role="alert">
 							<p class="text-center" th:text="${session.message.content}"></p>
 							<th:block th:text="${@sessionHelper.removeMessageFromSession()}"></th:block>
 							<!-- <th:block th:text="${@sessionHelper.removeMessageFromSession()"></th:block> -->
@@ -28,18 +28,26 @@
 
 						<h1 class="text-center">Register Here</h1>
 
+<!-- for testing custom validation while using bootstrap use 'novalidate' attribute -->
 						<form th:action="@{/doRegister}" method="post" th:object="${user}">
 
 							<div class="form-group">
 								<label for="name">Full Name</label> <input type="text"
 									class="form-control" id="name" name="name"
+									th:classappend="${#fields.hasErrors('name')?'is-invalid':''}"
 									placeholder="enter name" required th:value="${user.name}">
+
+								<div class="invalid-feedback"
+									th:each="e:${#fields.errors('name')}" th:text="${e}"></div>
 							</div>
 
 							<div class="form-group">
 								<label for="email">Email address</label> <input type="email"
 									class="form-control" id="email" name="email"
+									th:classappend="${#fields.hasErrors('email')?'is-invalid':''}"
 									placeholder="xyz@mail.com" required th:value="${user.email}">
+								<div class="invalid-feedback"
+									th:each="e:${#fields.errors('email')}" th:text="${e}"></div>
 							</div>
 							<div class="form-group">
 								<label for="password">Password</label> <input type="password"

@@ -9,7 +9,7 @@ import com.scm.dao.UserRepository;
 import com.scm.entities.User;
 
 public class UserDetailServiceImpl implements UserDetailsService {
-
+// second step for Role based autherization
 	@Autowired
 	private UserRepository userRepository;
 	

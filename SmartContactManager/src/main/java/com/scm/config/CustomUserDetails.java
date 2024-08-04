@@ -7,13 +7,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.scm.entities.User;
+import com.scm.entities.Users;
 
 public class CustomUserDetails implements UserDetails{
 // First step for Role based autherization
-	private User user;
+	private Users user;
 		
-	public CustomUserDetails(User user) {
+	public CustomUserDetails(Users user) {
 		super();
 		this.user = user;
 	}

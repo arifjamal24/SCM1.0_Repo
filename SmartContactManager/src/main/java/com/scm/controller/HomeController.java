@@ -1,6 +1,7 @@
 package com.scm.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.scm.dao.UserRepository;
-import com.scm.entities.User;
+import com.scm.entities.Users;
 import com.scm.helper.Message;
 
 import jakarta.servlet.http.HttpSession;
@@ -21,6 +22,9 @@ public class HomeController {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 	
 	@RequestMapping("/")
 	public String home(Model m) {
@@ -37,12 +41,12 @@ public class HomeController {
 	@RequestMapping("/signup")
 	public String signup(Model m) {
 		m.addAttribute("title","Register - Smart Contact Manager");
-		m.addAttribute("user",new User());
+		m.addAttribute("user",new Users());
 		return "signup";
 	}
 	
 	@PostMapping("/doRegister")
-	public String registerUser(@Valid @ModelAttribute User user,BindingResult result,
+	public String registerUser(@Valid @ModelAttribute Users user,BindingResult result,
 			@RequestParam(value="agreement",defaultValue = "false") boolean agreement,Model model,
 			HttpSession session) {
 		try {
@@ -56,16 +60,19 @@ public class HomeController {
 				model.addAttribute("user",user);
 				return "signup";
 			}
-			user.setRole("ROLE_USER");
+			// user.setRole("ROLE_USER"); 
+			// Do'Not use 'ROLE_' this latest 3.3.1 version automatically add ROLE_ as prefix
+			user.setRole("USER");
 			user.setEnabled(true);
 			user.setImageUrl("default.png");
+			user.setPassword(passwordEncoder.encode(user.getPassword()));
 			
 			System.out.println("agreement: "+agreement);
 			System.out.println("model: "+user);
 			
 			 this.userRepository.save(user);
 			
-			model.addAttribute("user", new User());
+			model.addAttribute("user", new Users());
 			session.setAttribute("message", new Message("Successfully Registered !!","alert-success"));
 			return "signup";
 		} catch (Exception e) {

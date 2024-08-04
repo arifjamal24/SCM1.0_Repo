@@ -18,7 +18,7 @@ private String image;
 private String description;
 
 @ManyToOne
-private User user;
+private Users user;
 
 public Contact() {
 	super();
@@ -72,10 +72,10 @@ public String getDescription() {
 public void setDescription(String description) {
 	this.description = description;
 }
-public User getUser() {
+public Users getUser() {
 	return user;
 }
-public void setUser(User user) {
+public void setUser(Users user) {
 	this.user = user;
 }
 

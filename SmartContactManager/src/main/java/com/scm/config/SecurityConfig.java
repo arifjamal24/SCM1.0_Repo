@@ -42,7 +42,8 @@ public class SecurityConfig {
 			register.requestMatchers("/**").permitAll();
 			register.anyRequest().authenticated();
 		})
-		.formLogin(form->form.permitAll());
+		.formLogin(form->form.permitAll())
+		.formLogin(login->login.loginPage("/signin"));
 		return http.build();
 	}
 	

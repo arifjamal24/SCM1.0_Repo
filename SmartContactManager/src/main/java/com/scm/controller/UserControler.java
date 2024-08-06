@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.scm.dao.ContactRepository;
 import com.scm.dao.UserRepository;
 import com.scm.entities.Contact;
 import com.scm.entities.Users;
@@ -32,6 +34,9 @@ public class UserControler {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private ContactRepository contactRepository;
 
 	@ModelAttribute
 	public void addCommonData(Model m, Principal p) {
@@ -99,6 +104,17 @@ public class UserControler {
 			session.setAttribute("message", new Message("Something went wrong !!","danger"));
 		}
 		return "general/addContact";
+	}
+	
+	@GetMapping("/show-contacts")
+	public String showContact(Model m,Principal p) {
+		m.addAttribute("title","Show Contacts");
+		var username = p.getName();
+	Users user = this.userRepository.getUsersByUserName(username).get();
+	Optional<List<Contact>> contactsByUser = this.contactRepository.findContactsByUser(user.getId());
+	List<Contact> list = contactsByUser.get();
+	m.addAttribute("listOfContacts",list);
+		return "general/showContact";
 	}
 
 }

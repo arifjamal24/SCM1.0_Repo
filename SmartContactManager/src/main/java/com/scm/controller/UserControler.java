@@ -7,6 +7,7 @@ import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.util.Optional;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.scm.dao.UserRepository;
 import com.scm.entities.Contact;
 import com.scm.entities.Users;
+import com.scm.helper.Message;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/user")
@@ -53,10 +57,15 @@ public class UserControler {
 	
 	@PostMapping("/addContact")
 	public String addContactAction(@ModelAttribute Contact contact,
-			@RequestParam("profileImage") MultipartFile file, Principal principal) {
+			@RequestParam("profileImage") MultipartFile file,
+			Principal principal, HttpSession session) {
 		try {
 		var userId = principal.getName();
 		var obj = this.userRepository.getUsersByUserName(userId);
+		
+		/* to generate exception for testing
+		 * if(true) throw new Exception();
+		 */
 		
 		// proccessing and uploading file
 		if(!file.isEmpty()) {
@@ -79,9 +88,15 @@ public class UserControler {
 		this.userRepository.save(user);
 		System.out.println(contact);
 		System.out.println("added to databnase");
+		// send success msg
+		session.setAttribute("message", new Message("Contact added successfully !! Add more...","success"));
+		
 		}catch(Exception e){
 			System.out.println(e.getMessage());
 			e.printStackTrace();
+			
+			// send error msg
+			session.setAttribute("message", new Message("Something went wrong !!","danger"));
 		}
 		return "general/addContact";
 	}

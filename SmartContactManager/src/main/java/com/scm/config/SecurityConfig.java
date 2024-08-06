@@ -36,14 +36,16 @@ public class SecurityConfig {
 	public SecurityFilterChain security(HttpSecurity http) throws Exception {
 		http
 			.csrf(csrf -> csrf.disable()) // make sure to maintain order
-			.authorizeHttpRequests(register->{
-			register.requestMatchers("/admin/**").hasRole("ADMIN"); 
-			register.requestMatchers("/user/**").hasRole("USER");
-			register.requestMatchers("/**").permitAll();
-			register.anyRequest().authenticated();
+			.authorizeHttpRequests(register->{ register
+			.requestMatchers("/admin/**").hasRole("ADMIN") 
+			.requestMatchers("/user/**").hasRole("USER")
+			.requestMatchers("/**").permitAll()
+			.anyRequest().authenticated();
 		})
 		.formLogin(form->form.permitAll())
-		.formLogin(login->login.loginPage("/signin"));
+		.formLogin(login->login.loginPage("/signin"))
+		.formLogin(login->login.loginProcessingUrl("/dologin"))
+		.formLogin(login->login.defaultSuccessUrl("/user/index"));
 		return http.build();
 	}
 	

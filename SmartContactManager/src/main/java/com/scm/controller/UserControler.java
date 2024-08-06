@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.scm.dao.UserRepository;
@@ -40,6 +41,19 @@ public class UserControler {
 	public String openAddContactForm(Model m) {
 		m.addAttribute("title","Add Contact");
 		m.addAttribute("contact", new Contact());
+		return "general/addContact";
+	}
+	
+	@PostMapping("/addContact")
+	public String addContactAction(@ModelAttribute Contact contact, Principal principal) {
+		var userId = principal.getName();
+		var obj = this.userRepository.getUsersByUserName(userId);
+		Users user = obj.get();
+		contact.setUser(user);
+		user.getContacts().add(contact);
+		this.userRepository.save(user);
+		System.out.println(contact);
+		System.out.println("added to databnase");
 		return "general/addContact";
 	}
 

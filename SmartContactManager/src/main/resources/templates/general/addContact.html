@@ -14,7 +14,7 @@
 				<div class="container-fluid mt-1"></div>
 				<div class="row">
 					<div class="col-md-8 offset-md-2">
-						<form th:object="${contact}" enctype="multipart/form-data" method="post"
+						<form th:object="${customObjName}" enctype="multipart/form-data" method="post"
 							th:action="@{/user/addContact}" class="mt-2">
 
 							<div class="input-group">
@@ -73,7 +73,7 @@
 							</div>
 							
 							<div class="custom-file mt-3">
-								<input type="file" class="form-control" name="image" />
+								<input type="file" class="form-control" name="profileImage" />
 							</div>
 							<div class="container mt-3 text-center">
 								<button class="btn btn-outline-primary">Save Contact</button>

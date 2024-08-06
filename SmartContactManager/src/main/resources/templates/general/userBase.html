@@ -12,6 +12,9 @@
 
 	<title th:text="${title}">base page</title>
 	<link rel="stylesheet" th:href="@{/css/style.css}" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+		integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+		crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
@@ -28,8 +31,7 @@
 				<li class="nav-item active"><a class="nav-link" th:href="@{/}">Home
 						<span class="sr-only">(current)</span>
 					</a></li>
-				<li class="nav-item"><a class="nav-link" href="#"><span
-							th:text="${userDetail.name}"></span></a></li>
+				<li class="nav-item"><a class="nav-link" href="#"><span th:text="${userDetail.name}"></span></a></li>
 				<li class="nav-item"><a class="nav-link" th:href="@{/logout}">Logout</a></li>
 			</ul>
 
@@ -37,8 +39,25 @@
 	</nav>
 	<!-- end of navbar -->
 
+	<!-- sidebar -->
+	<div class="sidebar">
+		<span class="crossBtn" onclick="toggleSideBar()">&times;</span>
+		<a href="#" class="item"><i class="fa-solid fa-house" style="color: #009688;"></i> Home</a>
+		<a href="#" class="item"><i class="fa-solid fa-id-card-clip" style="color: #009688;"></i> View Contacts</a>
+		<a href="#" class="item"><i class="fa-solid fa-user-pen" style="color: #009688;"></i> Add Contact</a>
+		<a href="#" class="item"><i class="fa-solid fa-user" style="color: #009688;"></i> Your Profile</a>
+		<a href="#" class="item"><i class="fa-solid fa-gear" style="color: #009688;"></i> Settings</a>
+		<a href="#" class="item"><i class="fa-solid fa-right-from-bracket" style="color: #009688;"></i> Logout</a>
+		<div class="divider"></div>
+	</div>
+	<!-- END of sidebar -->
 
-	<div th:replace="${content}"></div>
+	<!-- content -->
+	<div class="content">
+		<i class="fa-solid fa-bars m-3" onclick="toggleSideBar()"></i>
+		<div th:replace="${content}"></div>
+	</div>
+	<!-- END of content -->
 
 	<!-- Optional JavaScript; choose one of the two! -->
 

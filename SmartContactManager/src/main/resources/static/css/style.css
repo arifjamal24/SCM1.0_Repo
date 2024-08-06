@@ -59,6 +59,7 @@ body {
 	background-color: white;
 	position: fixed;
 	padding-top: 45px;
+	z-index:1000;
 }
 
 .sidebar a {

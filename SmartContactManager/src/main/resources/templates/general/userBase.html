@@ -19,7 +19,7 @@
 
 <body>
 	<!-- start of navbar -->
-	<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+	<nav class="navbar navbar-expand-lg navbar-dark fixed-top bg-primary">
 		<a class="navbar-brand" href="#">Smart Contact Manager</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
 			aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,7 +40,7 @@
 	<!-- end of navbar -->
 
 	<!-- sidebar -->
-	<div class="sidebar">
+	<div class="sidebar mt-2">
 		<span class="crossBtn" onclick="toggleSideBar()">&times;</span>
 		<a href="#" th:href="@{/user/index}" class="item"><i class="fa-solid fa-house" style="color: #009688;"></i> Home</a>
 		<a href="#" class="item"><i class="fa-solid fa-id-card-clip" style="color: #009688;"></i> View Contacts</a>
@@ -53,8 +53,8 @@
 	<!-- END of sidebar -->
 
 	<!-- content -->
-	<div class="content">
-		<i class="fa-solid fa-bars m-3" onclick="toggleSideBar()"></i>
+	<div class="content mt-5">
+		<i class="fa-solid fa-bars m-3" style="cursor:pointer" onclick="toggleSideBar()"></i>
 		<div th:replace="${content}"></div>
 	</div>
 	<!-- END of content -->

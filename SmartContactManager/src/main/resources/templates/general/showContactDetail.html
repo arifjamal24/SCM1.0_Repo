@@ -8,7 +8,7 @@
 
 <body>
 	<section>
-		<div class="card mr-3 ml-3">
+		<div class="card mr-3 ml-3" th:if="${contactDetail}">
 			<div class="card-body">
 				<div class="container text-center">
 					<img style="height: 200px; width: 200px;" class="profileImage"
@@ -57,6 +57,8 @@
 				</div>
 			</div>
 		</div>
+		
+		<h2 class="text-center p-3 bg-danger text-white" th:unless="${contactDetail}">The contact does not exist</h2>
 	</section>
 </body>
 

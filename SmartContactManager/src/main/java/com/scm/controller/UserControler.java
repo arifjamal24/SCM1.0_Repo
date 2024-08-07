@@ -122,10 +122,16 @@ public class UserControler {
 	}
 	
 	@RequestMapping("/{cid}/contactDetail")
-	public String showContactDetail(@PathVariable("cid") int cid,Model m) {
-		Optional<Contact> byId = this.contactRepository.findById(cid);
-		Contact con = byId.get();
-		m.addAttribute("contactDetail",con);
+	public String showContactDetail(@PathVariable("cid") int cid,Model m,Principal p) {
+		var contact = this.contactRepository.findById(cid).get();
+		var username = p.getName();
+		Users user = this.userRepository.getUsersByUserName(username).get();
+		
+		if(user.getId() == contact.getUser().getId()) {		
+		m.addAttribute("contactDetail",contact);
+		m.addAttribute("title",contact.getName());
+		}
+		
 		return "general/showContactDetail";
 	}
 

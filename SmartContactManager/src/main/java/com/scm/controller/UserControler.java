@@ -162,5 +162,14 @@ public class UserControler {
 
 		return "redirect:/user/show-contacts/0";
 	}
+	
+	@PostMapping("/update/{cid}")
+	public String updateContactForm(@PathVariable("cid") int cid, Principal p,HttpSession session,Model m) {
+		Contact contact = this.contactRepository.findById(cid).get();
+		m.addAttribute("updateContactDetail",contact);
+		m.addAttribute("title","Update Contact");
+		
+		return "general/updateContact";
+	}
 
 }

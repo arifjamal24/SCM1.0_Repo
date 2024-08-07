@@ -11,10 +11,14 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -106,14 +110,19 @@ public class UserControler {
 		return "general/addContact";
 	}
 	
-	@GetMapping("/show-contacts")
-	public String showContact(Model m,Principal p) {
+	@GetMapping("/show-contacts/{page}")
+	public String showContact(@PathVariable("page") int page,Model m,Principal p) {
 		m.addAttribute("title","Show Contacts");
 		var username = p.getName();
 	Users user = this.userRepository.getUsersByUserName(username).get();
-	Optional<List<Contact>> contactsByUser = this.contactRepository.findContactsByUser(user.getId());
-	List<Contact> list = contactsByUser.get();
+	
+	Pageable pgNo_pgSize = PageRequest.of(page, 3);
+	Optional<Page<Contact>> contactsByUser = this.contactRepository.findContactsByUser(user.getId(),pgNo_pgSize);
+	Page<Contact> list = contactsByUser.get();
 	m.addAttribute("listOfContacts",list);
+	m.addAttribute("currentPage",page);
+	m.addAttribute("totalPages",list.getTotalPages());
+	
 		return "general/showContact";
 	}
 

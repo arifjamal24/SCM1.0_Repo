@@ -1,13 +1,14 @@
 package com.scm.controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
@@ -38,7 +39,7 @@ public class UserControler {
 
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	@Autowired
 	private ContactRepository contactRepository;
 
@@ -48,91 +49,118 @@ public class UserControler {
 		String userName = p.getName();
 		Optional<Users> user = userRepository.getUsersByUserName(userName);
 		var u = user.get();
-		m.addAttribute("userDetail", u); 
+		m.addAttribute("userDetail", u);
 	}
 
 	@RequestMapping("/index")
 	public String dashboard(Model m) {
-		m.addAttribute("title","User Dashboard");
+		m.addAttribute("title", "User Dashboard");
 		return "general/userDashboard";
 	}
 
 	@GetMapping("/add-contact")
 	public String openAddContactForm(Model m) {
-		m.addAttribute("title","Add Contact");
+		m.addAttribute("title", "Add Contact");
 		m.addAttribute("contact", new Contact());
 		return "general/addContact";
 	}
-	
+
 	@PostMapping("/addContact")
-	public String addContactAction(@ModelAttribute Contact contact,
-			@RequestParam("profileImage") MultipartFile file,
+	public String addContactAction(@ModelAttribute Contact contact, @RequestParam("profileImage") MultipartFile file,
 			Principal principal, HttpSession session) {
 		try {
-		var userId = principal.getName();
-		var obj = this.userRepository.getUsersByUserName(userId);
-		
-		/* to generate exception for testing
-		 * if(true) throw new Exception();
-		 */
-		
-		// proccessing and uploading file
-		if(!file.isEmpty()) {
-			contact.setImage(file.getOriginalFilename());
-			
-			File saveFile = new ClassPathResource("/static/img/contact").getFile();
-		var path = Paths.get(saveFile.getAbsolutePath()+File.separator+file.getOriginalFilename());
-			Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-		}
-		else {
-			contact.setImage("default-contact.png");
-		}
-		
-		Users user = obj.get();
-		contact.setUser(user);
-		user.getContacts().add(contact);
-		this.userRepository.save(user);
-		
-		// send success msg
-		session.setAttribute("message", new Message("Contact added successfully !! Add more...","success"));
-		
-		}catch(Exception e){
+			var userId = principal.getName();
+			var obj = this.userRepository.getUsersByUserName(userId);
+
+			/*
+			 * to generate exception for testing if(true) throw new Exception();
+			 */
+
+			// proccessing and uploading file
+			if (!file.isEmpty()) {
+				contact.setImage(file.getOriginalFilename());
+
+				File saveFile = new ClassPathResource("/static/img/contact").getFile();
+				Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + file.getOriginalFilename());
+				Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+
+			} else {
+				contact.setImage("default-contact.png");
+			}
+
+			Users user = obj.get();
+			contact.setUser(user);
+			user.getContacts().add(contact);
+			this.userRepository.save(user);
+
+			// send success msg
+			session.setAttribute("message", new Message("Contact added successfully !! Add more...", "success"));
+
+		} catch (Exception e) {
 			e.printStackTrace();
-			
+
 			// send error msg
-			session.setAttribute("message", new Message("Something went wrong !!","danger"));
+			session.setAttribute("message", new Message("Something went wrong !!", "danger"));
 		}
 		return "general/addContact";
 	}
-	
+
 	@GetMapping("/show-contacts/{page}")
-	public String showContact(@PathVariable("page") int page,Model m,Principal p) {
-		m.addAttribute("title","Show Contacts");
+	public String showContact(@PathVariable("page") int page, Model m, Principal p) {
+		m.addAttribute("title", "Show Contacts");
 		var username = p.getName();
-	Users user = this.userRepository.getUsersByUserName(username).get();
-	
-	Pageable pgNo_pgSize = PageRequest.of(page, 3);
-	Optional<Page<Contact>> contactsByUser = this.contactRepository.findContactsByUser(user.getId(),pgNo_pgSize);
-	Page<Contact> list = contactsByUser.get();
-	m.addAttribute("listOfContacts",list);
-	m.addAttribute("currentPage",page);
-	m.addAttribute("totalPages",list.getTotalPages());
-	
+		Users user = this.userRepository.getUsersByUserName(username).get();
+
+		Pageable pgNo_pgSize = PageRequest.of(page, 3);
+		Optional<Page<Contact>> contactsByUser = this.contactRepository.findContactsByUser(user.getId(), pgNo_pgSize);
+		Page<Contact> list = contactsByUser.get();
+		m.addAttribute("listOfContacts", list);
+		m.addAttribute("currentPage", page);
+		m.addAttribute("totalPages", list.getTotalPages());
+
 		return "general/showContact";
 	}
-	
+
 	@RequestMapping("/{cid}/contactDetail")
-	public String showContactDetail(@PathVariable("cid") int cid,Model m,Principal p) {
+	public String showContactDetail(@PathVariable("cid") int cid, Model m, Principal p) {
 		var contact = this.contactRepository.findById(cid).get();
 		var username = p.getName();
 		Users user = this.userRepository.getUsersByUserName(username).get();
-		
-		if(user.getId() == contact.getUser().getId()) {		
-		m.addAttribute("contactDetail",contact);
-		m.addAttribute("title",contact.getName());
+
+		if (user.getId() == contact.getUser().getId()) {
+			m.addAttribute("contactDetail", contact);
+			m.addAttribute("title", contact.getName());
 		}
-		
+
 		return "general/showContactDetail";
+	}
+
+	@GetMapping("/delete/{cid}")
+	public String deleteContact(@PathVariable("cid") int cid, Principal p,HttpSession session) {
+		var username = p.getName();
+		Users user = this.userRepository.getUsersByUserName(username).get();
+		Contact contact = this.contactRepository.findById(cid).get();
+		// if not deleted in any case then use
+	   //  contact.setUser(null);
+		
+		if (user.getId() == contact.getUser().getId()) {
+			// remove contact image from directory ie. /img/contact/fileName
+			
+			try {
+				File filePath = new ClassPathResource("/static/img/contact").getFile();
+				Path path = Paths.get(filePath.getAbsolutePath()+File.separator+contact.getImage());
+				if(!contact.getImage().equals("default-contact.png"))
+				Files.deleteIfExists(path);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+			this.contactRepository.delete(contact);
+			session.setAttribute("message", new Message("Contact deleted successfully...","success"));
+		}
+
+		return "redirect:/user/show-contacts/0";
 	}
 
 }

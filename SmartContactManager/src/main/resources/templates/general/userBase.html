@@ -52,9 +52,9 @@
 		<span class="crossBtn" onclick="toggleSideBar()">&times;</span> <a
 			href="#" th:href="@{/user/index}" class="item"><i
 			class="fa-solid fa-house" style="color: #009688;"></i> Home</a> <a
-			href="#" th:href="@{/user/show-contacts/0}" class="item"><i class="fa-solid fa-id-card-clip"
-			style="color: #009688;"></i> View Contacts</a> <a href="#"
-			th:href="@{/user/add-contact}" class="item"><i
+			href="#" th:href="@{/user/show-contacts/0}" class="item"><i
+			class="fa-solid fa-id-card-clip" style="color: #009688;"></i> View
+			Contacts</a> <a href="#" th:href="@{/user/add-contact}" class="item"><i
 			class="fa-solid fa-user-pen" style="color: #009688;"></i> Add Contact</a>
 		<a href="#" class="item"><i class="fa-solid fa-user"
 			style="color: #009688;"></i> Your Profile</a> <a href="#" class="item"><i
@@ -71,10 +71,11 @@
 		<i class="fa-solid fa-bars m-3" style="cursor: pointer"
 			onclick="toggleSideBar()"></i>
 		<div class="container" th:if="${session.message}">
-			<div th:classappend="${'alert-'+session.message.type}" class="alert text-center" role="alert">
-			<span th:text="${session.message.content}"></span>
-		</div>
-		<th:block th:text="${@sessionHelper.removeMessageFromSession()}"></th:block>
+			<div th:classappend="${'alert-'+session.message.type}"
+				class="alert text-center" role="alert">
+				<span th:text="${session.message.content}"></span>
+			</div>
+			<th:block th:text="${@sessionHelper.removeMessageFromSession()}"></th:block>
 		</div>
 		<div th:replace="${content}"></div>
 	</div>
@@ -91,7 +92,27 @@
 		src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
 		crossorigin="anonymous"></script>
+	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 	<script th:src="@{/js/script.js}"></script>
+
+<script>
+	function deleteContact(cid){
+	swal({
+  title: "Are you sure?",
+  text: "you want to delete this contact...",
+  icon: "warning",
+  buttons: true,
+  dangerMode: true,
+})
+.then((willDelete) => {
+  if (willDelete) {
+   window.location = "/user/delete/"+cid;
+  } else {
+    swal("Your contact is safe!");
+  }
+});
+	}
+</script>
 
 </body>
 

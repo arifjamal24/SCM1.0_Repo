@@ -13,7 +13,7 @@
 				<h1 class="text-center">Your Contacts</h1>
 
 				<div class="tableDiv">
-					<table class="table">
+					<table class="table table-hover">
 						<thead>
 							<tr>
 								<th scope="col">#ID</th>
@@ -26,8 +26,13 @@
 						<tbody>
 							<tr th:each="c: ${listOfContacts}">
 								<th scope="row" th:text="${'SCM2024'+c.cid}"></th>
-								<td th:text="${c.name}"></td>
-								<td th:text="${c.email}"></td>
+								<td>
+								<img class="profileImage" src="" th:src="@{'/img/contact/'+${c.image}}" alt="" />
+								<span th:text="${c.name}"></span>
+								</td>
+								<td>
+								<a href="" th:href="@{'/user/'+${c.cid}+'/contactDetail'}" ><span th:text="${c.email}"></span></a>
+								</td>
 								<td th:text="${c.phone}"></td>
 								<td>
 									<button class="btn btn-danger btn-sm">

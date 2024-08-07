@@ -81,27 +81,22 @@ public class UserControler {
 			contact.setImage(file.getOriginalFilename());
 			
 			File saveFile = new ClassPathResource("/static/img/contact").getFile();
-			System.out.println(saveFile);
-			System.out.println(saveFile.getAbsolutePath());
-		var path = Paths.get(saveFile.getAbsolutePath()+File.pathSeparator+file.getOriginalFilename());
+		var path = Paths.get(saveFile.getAbsolutePath()+File.separator+file.getOriginalFilename());
 			Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-		System.out.println("Images is uploaded");
 		}
 		else {
-			System.out.println("file is empty");
+			contact.setImage("default-contact.png");
 		}
 		
 		Users user = obj.get();
 		contact.setUser(user);
 		user.getContacts().add(contact);
 		this.userRepository.save(user);
-		System.out.println(contact);
-		System.out.println("added to databnase");
+		
 		// send success msg
 		session.setAttribute("message", new Message("Contact added successfully !! Add more...","success"));
 		
 		}catch(Exception e){
-			System.out.println(e.getMessage());
 			e.printStackTrace();
 			
 			// send error msg
@@ -124,6 +119,14 @@ public class UserControler {
 	m.addAttribute("totalPages",list.getTotalPages());
 	
 		return "general/showContact";
+	}
+	
+	@RequestMapping("/{cid}/contactDetail")
+	public String showContactDetail(@PathVariable("cid") int cid,Model m) {
+		Optional<Contact> byId = this.contactRepository.findById(cid);
+		Contact con = byId.get();
+		m.addAttribute("contactDetail",con);
+		return "general/showContactDetail";
 	}
 
 }

@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{general/userBase::layout(~{::section})}">
+<head>
+<meta charset="UTF-8" />
+<title>Welcome</title>
+</head>
+
+<body>
+	<section>
+		<div class="card mr-3 ml-3">
+			<div class="card-body">
+				<div class="container text-center">
+					<img style="height: 200px; width: 200px;" class="profileImage"
+						src="" th:src="@{'/img/contact/'+${contactDetail.image}}" alt="" />
+					<h3 class="mt-3">
+						<span th:text="${contactDetail.name}"></span> ( <span
+							th:text="${contactDetail.secondName}"></span> )
+					</h3>
+
+					<table class="table">
+						<thead>
+							<tr>
+								<th scope="col">#ID</th>
+								<th scope="col"><span th:text="${contactDetail.cid}"></span></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<th scope="row">Email</th>
+								<td><span th:text="${contactDetail.email}"></span></td>
+							</tr>
+							<tr>
+								<th scope="row">Phone</th>
+								<td><span th:text="${contactDetail.phone}"></span></td>
+							</tr>
+							<tr>
+								<th scope="row">Work</th>
+								<td><span th:text="${contactDetail.work}"></span></td>
+							</tr>
+
+						</tbody>
+					</table>
+
+					<div class="description mt-3">
+						<th:block th:utext="${contactDetail.description}"></th:block>
+					</div>
+
+					<div class="container mt-3">
+						<button class="btn btn-danger btn-sm">
+							<i class="fa-solid fa-trash-can text-white"></i> Delete
+						</button>
+						<button class="btn btn-primary btn-sm">
+							<i class="fa-solid fa-pen-to-square text-white"></i> Update
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</body>
+
+</html>

@@ -93,3 +93,10 @@ body {
 .content {
 	margin-left: 20%;
 }
+
+.profileImage{
+	height:35px;
+	width:35px;
+	object-fit:cover;
+	border-radius:50%;
+}

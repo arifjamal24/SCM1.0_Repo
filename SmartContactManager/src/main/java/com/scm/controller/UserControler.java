@@ -206,4 +206,10 @@ public class UserControler {
 		return "redirect:/user/" + contact.getCid() + "/contactDetail";
 	}
 
+	@GetMapping("/user-profile")
+	public String userProfile(Model m) {
+		System.out.println("profile itt");
+		m.addAttribute("title", "Update Contact");
+		return "general/userProfile";
+	}
 }

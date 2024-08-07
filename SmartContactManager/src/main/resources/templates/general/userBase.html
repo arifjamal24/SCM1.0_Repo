@@ -56,7 +56,7 @@
 			class="fa-solid fa-id-card-clip" style="color: #009688;"></i> View
 			Contacts</a> <a href="#" th:href="@{/user/add-contact}" class="item"><i
 			class="fa-solid fa-user-pen" style="color: #009688;"></i> Add Contact</a>
-		<a href="#" class="item"><i class="fa-solid fa-user"
+		<a href="#" th:href="@{/user/user-profile}" class="item"><i class="fa-solid fa-user"
 			style="color: #009688;"></i> Your Profile</a> <a href="#" class="item"><i
 			class="fa-solid fa-gear" style="color: #009688;"></i> Settings</a> <a
 			href="#" th:href="@{/logout}" class="item"><i
@@ -95,7 +95,7 @@
 	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 	<script th:src="@{/js/script.js}"></script>
 
-<script>
+	<script>
 	function deleteContact(cid){
 	swal({
   title: "Are you sure?",

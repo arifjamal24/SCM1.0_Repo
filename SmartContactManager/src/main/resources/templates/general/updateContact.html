@@ -15,8 +15,10 @@
 				<div class="row">
 					<div class="col-md-8 offset-md-2">
 						<form th:object="${customObjName}" enctype="multipart/form-data"
-							method="post" th:action="@{/user/addContact}" class="mt-2">
+							method="post" th:action="@{/user/updateContact}" class="mt-2">
 
+							<input type="hidden" name="cid"
+								th:value="${updateContactDetail.cid}" />
 							<div class="input-group">
 								<div class="input-group-prepend">
 									<div class="input-group-text">
@@ -80,7 +82,7 @@
 									placeholder="Enter your brief description"></textarea>
 							</div>
 							<div class="container mt-2 text-center">
-								<img style="height:200px;width:200px;" src=""
+								<img style="height: 200px; width: 200px;border-radius:50%;" src=""
 									th:src="@{'/img/contact/'+${updateContactDetail.image}}" alt="" />
 							</div>
 							<div class="custom-file mt-3">

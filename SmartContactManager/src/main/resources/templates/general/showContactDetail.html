@@ -47,18 +47,24 @@
 					</div>
 
 					<div class="container mt-3">
-						<button class="btn btn-danger btn-sm" th:onclick="|deleteContact(${contactDetail.cid})|">
+						<button class="btn btn-danger btn-sm"
+							th:onclick="|deleteContact(${contactDetail.cid})|">
 							<i class="fa-solid fa-trash-can text-white"></i> Delete
 						</button>
-						<button class="btn btn-primary btn-sm">
-							<i class="fa-solid fa-pen-to-square text-white"></i> Update
-						</button>
+						<form th:action="@{'/user/update/'+${contactDetail.cid}}" class="mt-3"
+							method="post">
+							<button type="submit" class="btn btn-primary btn-sm">
+								<i class="fa-solid fa-pen-to-square text-white"></i> Update
+								Contact
+							</button>
+						</form>
 					</div>
 				</div>
 			</div>
 		</div>
-		
-		<h2 class="text-center p-3 bg-danger text-white" th:unless="${contactDetail}">The contact does not exist</h2>
+
+		<h2 class="text-center p-3 bg-danger text-white"
+			th:unless="${contactDetail}">The contact does not exist</h2>
 	</section>
 </body>
 

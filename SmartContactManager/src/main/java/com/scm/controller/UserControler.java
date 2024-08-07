@@ -136,40 +136,74 @@ public class UserControler {
 	}
 
 	@GetMapping("/delete/{cid}")
-	public String deleteContact(@PathVariable("cid") int cid, Principal p,HttpSession session) {
+	public String deleteContact(@PathVariable("cid") int cid, Principal p, HttpSession session) {
 		var username = p.getName();
 		Users user = this.userRepository.getUsersByUserName(username).get();
 		Contact contact = this.contactRepository.findById(cid).get();
 		// if not deleted in any case then use
-	   //  contact.setUser(null);
-		
+		// contact.setUser(null);
+
 		if (user.getId() == contact.getUser().getId()) {
 			// remove contact image from directory ie. /img/contact/fileName
-			
+
 			try {
 				File filePath = new ClassPathResource("/static/img/contact").getFile();
-				Path path = Paths.get(filePath.getAbsolutePath()+File.separator+contact.getImage());
-				if(!contact.getImage().equals("default-contact.png"))
-				Files.deleteIfExists(path);
+				Path path = Paths.get(filePath.getAbsolutePath() + File.separator + contact.getImage());
+				if (!contact.getImage().equals("default-contact.png"))
+					Files.deleteIfExists(path);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		
+
 			this.contactRepository.delete(contact);
-			session.setAttribute("message", new Message("Contact deleted successfully...","success"));
+			session.setAttribute("message", new Message("Contact deleted successfully...", "success"));
 		}
 
 		return "redirect:/user/show-contacts/0";
 	}
-	
+
 	@PostMapping("/update/{cid}")
-	public String updateContactForm(@PathVariable("cid") int cid, Principal p,HttpSession session,Model m) {
+	public String updateContactForm(@PathVariable("cid") int cid, Principal p, HttpSession session, Model m) {
 		Contact contact = this.contactRepository.findById(cid).get();
-		m.addAttribute("updateContactDetail",contact);
-		m.addAttribute("title","Update Contact");
-		
+		m.addAttribute("updateContactDetail", contact);
+		m.addAttribute("title", "Update Contact");
+
 		return "general/updateContact";
+	}
+
+	@PostMapping("/updateContact")
+	public String updateContact(@ModelAttribute Contact contact, @RequestParam("profileImage") MultipartFile file,
+			Principal p, HttpSession session) {
+		try {
+			Contact oldContactDetail = this.contactRepository.findById(contact.getCid()).get();
+
+			System.out.println(contact.getCid());
+			if (!file.isEmpty()) {
+				
+				// delete old image
+				File filePath = new ClassPathResource("/static/img/contact").getFile();
+				Path delpath = Paths.get(filePath.getAbsolutePath() + File.separator + oldContactDetail.getImage());
+				if (!oldContactDetail.getImage().equals("default-contact.png"))
+					Files.deleteIfExists(delpath);
+				
+				// update new image
+				
+				File saveFile = new ClassPathResource("/static/img/contact").getFile();
+				Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + file.getOriginalFilename());
+				Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+				contact.setImage(file.getOriginalFilename());
+			} else {
+				contact.setImage(oldContactDetail.getImage());
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		Users users = this.userRepository.getUsersByUserName(p.getName()).get();
+		contact.setUser(users);
+		this.contactRepository.save(contact);
+		session.setAttribute("message", new Message("Contact updated successfully...", "success"));
+		return "redirect:/user/" + contact.getCid() + "/contactDetail";
 	}
 
 }

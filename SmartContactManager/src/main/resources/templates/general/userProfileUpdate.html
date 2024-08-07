@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{general/userBase::layout(~{::section})}">
+<head>
+<meta charset="UTF-8" />
+<title>Welcome</title>
+</head>
+
+<body>
+	<section>
+		<div class="card mr-3 ml-3">
+			<div class="card-body">
+				<h1 class="text-center">Edit Profile</h1>
+				<div class="container-fluid mt-1"></div>
+				<div class="row">
+					<div class="col-md-8 offset-md-2">
+						<form enctype="multipart/form-data"
+							method="post" th:action="@{/user/userProfileUpdate}" class="mt-2">
+
+							<input type="hidden" name="id"
+								th:value="${userDetail.id}" />
+							<div class="input-group">
+								<div class="input-group-prepend">
+									<div class="input-group-text">
+										<i class="fa fa-user-plus"></i>
+									</div>
+								</div>
+								<input type="text" id="name" name="name"
+									placeholder="Enter name" th:value="${userDetail.name}"
+									class="form-control" />
+							</div>
+
+							<div class="input-group mt-3">
+								<div class="input-group-prepend">
+									<div class="input-group-text">
+										<i class="fa-solid fa-user-alt"></i>
+									</div>
+								</div>
+								<input type="password" id="password" name="password"
+									placeholder="Enter new password" class="form-control" />
+							</div>
+
+							<div class="input-group mt-3">
+								<div class="input-group-prepend">
+									<div class="input-group-text">
+										<i class="fa-solid fa-at"></i>
+									</div>
+								</div>
+								<input type="email" id="email" name="email"
+									th:value="${userDetail.email}"
+									placeholder="Enter your email xyz@mail.com"
+									class="form-control" />
+							</div>
+
+							<div class="input-group mt-3">
+								<textarea name="about" id="description"
+									class="form-control" rows="10"
+									th:text="${userDetail.about}"
+									placeholder="Enter your brief description"></textarea>
+							</div>
+							<div class="container mt-2 text-center">
+								<img style="height: 200px; width: 200px;border-radius:50%;" src=""
+									th:src="@{'/img/'+${userDetail.imageUrl}}" alt="" />
+							</div>
+							<div class="custom-file mt-3">
+								<input type="file" class="form-control" name="profileImage" />
+							</div>
+							<div class="container mt-3 text-center">
+								<button class="btn btn-outline-primary">Update Profile</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script
+			src="https://cdn.tiny.cloud/1/1ccssmq8slwzfpfo6qbbysfuve626aornk7qegp0vy5swf5a/tinymce/7/tinymce.min.js"
+			referrerpolicy="origin"></script>
+		<script>
+    	  tinymce.init({
+        selector: '#description'
+      });
+    </script>
+	</section>
+</body>
+
+</html>

@@ -15,6 +15,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,6 +43,9 @@ public class UserControler {
 
 	@Autowired
 	private ContactRepository contactRepository;
+	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 
 	@ModelAttribute
 	public void addCommonData(Model m, Principal p) {
@@ -177,8 +181,6 @@ public class UserControler {
 			Principal p, HttpSession session) {
 		try {
 			Contact oldContactDetail = this.contactRepository.findById(contact.getCid()).get();
-
-			System.out.println(contact.getCid());
 			if (!file.isEmpty()) {
 				
 				// delete old image
@@ -208,8 +210,54 @@ public class UserControler {
 
 	@GetMapping("/user-profile")
 	public String userProfile(Model m) {
-		System.out.println("profile itt");
-		m.addAttribute("title", "Update Contact");
+		m.addAttribute("title", "User Profile");
 		return "general/userProfile";
+	}
+	
+	@GetMapping("/user-profile-update")
+	public String userProfileUpdate(Model m) {
+		m.addAttribute("title", "User Profile Update");
+		return "general/userProfileUpdate";
+	}
+	
+	@PostMapping("/userProfileUpdate")
+	public String userProfileUpdate(@ModelAttribute Users users, @RequestParam("profileImage") MultipartFile file,
+			Principal p, HttpSession session) {
+		try {
+			Users oldUserDetail = this.userRepository.getUsersByUserName(p.getName()).get();
+			System.err.println(oldUserDetail);
+			users.setRole(oldUserDetail.getRole());
+			users.setEnabled(true);
+			System.out.println("users.getPassword()---"+users.getPassword()+"---"+users.getPassword().length()+"{{{{"+users.getPassword().isBlank());
+			if(!users.getPassword().isBlank() && users.getPassword().length() > 2) {
+				System.out.println("mark1");
+			users.setPassword(passwordEncoder.encode(users.getPassword()));
+			}else {
+				System.out.println("mark2 " +oldUserDetail.getPassword());
+				users.setPassword(oldUserDetail.getPassword());
+			}
+			if (!file.isEmpty()) {				
+				// delete old image
+				File filePath = new ClassPathResource("/static/img").getFile();
+				Path delpath = Paths.get(filePath.getAbsolutePath() + File.separator + oldUserDetail.getImageUrl());
+				if (!oldUserDetail.getImageUrl().equals("default.png"))
+					Files.deleteIfExists(delpath);
+				
+				// update new image
+				
+				File saveFile = new ClassPathResource("/static/img").getFile();
+				Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + file.getOriginalFilename());
+				Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+				users.setImageUrl(file.getOriginalFilename());
+			} else {
+				users.setImageUrl(oldUserDetail.getImageUrl());
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		this.userRepository.save(users);
+		
+		session.setAttribute("message", new Message("profile updated successfully...", "success"));
+		return "redirect:/user/user-profile";
 	}
 }

@@ -1,5 +1,7 @@
 package com.scm.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import jakarta.persistence.ManyToOne;
 
@@ -18,6 +20,7 @@ private String image;
 private String description;
 
 @ManyToOne
+@JsonIgnore
 private Users user;
 
 public Contact() {

@@ -34,6 +34,7 @@ import com.scm.helper.Message;
 
 import jakarta.servlet.http.HttpSession;
 
+// controller is used when it return view or page
 @Controller
 @RequestMapping("/user")
 public class UserControler {

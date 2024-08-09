@@ -44,7 +44,7 @@ public class UserControler {
 
 	@Autowired
 	private ContactRepository contactRepository;
-	
+
 	@Autowired
 	private BCryptPasswordEncoder passwordEncoder;
 
@@ -183,15 +183,15 @@ public class UserControler {
 		try {
 			Contact oldContactDetail = this.contactRepository.findById(contact.getCid()).get();
 			if (!file.isEmpty()) {
-				
+
 				// delete old image
 				File filePath = new ClassPathResource("/static/img/contact").getFile();
 				Path delpath = Paths.get(filePath.getAbsolutePath() + File.separator + oldContactDetail.getImage());
 				if (!oldContactDetail.getImage().equals("default-contact.png"))
 					Files.deleteIfExists(delpath);
-				
+
 				// update new image
-				
+
 				File saveFile = new ClassPathResource("/static/img/contact").getFile();
 				Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + file.getOriginalFilename());
 				Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
@@ -214,38 +214,41 @@ public class UserControler {
 		m.addAttribute("title", "User Profile");
 		return "general/userProfile";
 	}
-	
-	@GetMapping("/user-profile-update")
+
+	@GetMapping("/profile-setting")
 	public String userProfileUpdate(Model m) {
 		m.addAttribute("title", "User Profile Update");
-		return "general/userProfileUpdate";
+		return "general/userProfileSetting";
 	}
-	
-	@PostMapping("/userProfileUpdate")
+
+	@PostMapping("/userProfileSetting")
 	public String userProfileUpdate(@ModelAttribute Users users, @RequestParam("profileImage") MultipartFile file,
-			Principal p, HttpSession session) {
+			Principal p, HttpSession session, @RequestParam("oldPassword") String oldPassword) {
+		System.out.println(users);
+
 		try {
 			Users oldUserDetail = this.userRepository.getUsersByUserName(p.getName()).get();
-			System.err.println(oldUserDetail);
 			users.setRole(oldUserDetail.getRole());
 			users.setEnabled(true);
-			System.out.println("users.getPassword()---"+users.getPassword()+"---"+users.getPassword().length()+"{{{{"+users.getPassword().isBlank());
-			if(!users.getPassword().isBlank() && users.getPassword().length() > 2) {
-				System.out.println("mark1");
-			users.setPassword(passwordEncoder.encode(users.getPassword()));
-			}else {
-				System.out.println("mark2 " +oldUserDetail.getPassword());
+
+			if (this.passwordEncoder.matches(oldPassword, oldUserDetail.getPassword())) {
+				if (!users.getPassword().isBlank() && users.getPassword().length() > 2) {
+					users.setPassword(this.passwordEncoder.encode(users.getPassword()));
+				} else {
+					users.setPassword(oldUserDetail.getPassword());
+				}
+			} else {
 				users.setPassword(oldUserDetail.getPassword());
 			}
-			if (!file.isEmpty()) {				
+			if (!file.isEmpty()) {
 				// delete old image
 				File filePath = new ClassPathResource("/static/img").getFile();
 				Path delpath = Paths.get(filePath.getAbsolutePath() + File.separator + oldUserDetail.getImageUrl());
 				if (!oldUserDetail.getImageUrl().equals("default.png"))
 					Files.deleteIfExists(delpath);
-				
+
 				// update new image
-				
+
 				File saveFile = new ClassPathResource("/static/img").getFile();
 				Path path = Paths.get(saveFile.getAbsolutePath() + File.separator + file.getOriginalFilename());
 				Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
@@ -257,7 +260,7 @@ public class UserControler {
 			// TODO: handle exception
 		}
 		this.userRepository.save(users);
-		
+
 		session.setAttribute("message", new Message("profile updated successfully...", "success"));
 		return "redirect:/user/user-profile";
 	}

@@ -10,15 +10,18 @@
 	<section>
 		<div class="card mr-3 ml-3">
 			<div class="card-body">
-				<h1 class="text-center">Edit Profile</h1>
+				<div class="container mt-2 text-center">
+					<img style="height: 200px; width: 200px; border-radius: 50%;"
+						src="" th:src="@{'/img/'+${userDetail.imageUrl}}" alt="" />
+				</div>
+				<h1 class="text-center mt-2">Edit Your Profile</h1>
 				<div class="container-fluid mt-1"></div>
 				<div class="row">
 					<div class="col-md-8 offset-md-2">
-						<form enctype="multipart/form-data"
-							method="post" th:action="@{/user/userProfileUpdate}" class="mt-2">
+						<form enctype="multipart/form-data" method="post"
+							th:action="@{/user/userProfileSetting}" class="mt-2">
 
-							<input type="hidden" name="id"
-								th:value="${userDetail.id}" />
+							<input type="hidden" name="id" th:value="${userDetail.id}" />
 							<div class="input-group">
 								<div class="input-group-prepend">
 									<div class="input-group-text">
@@ -33,7 +36,16 @@
 							<div class="input-group mt-3">
 								<div class="input-group-prepend">
 									<div class="input-group-text">
-										<i class="fa-solid fa-user-alt"></i>
+										<i class="fa-solid fa-lock"></i>
+									</div>
+								</div>
+								<input type="password" id="passwordOld" name="oldPassword"
+									placeholder="Enter old password" class="form-control" />
+							</div>
+							<div class="input-group mt-3">
+								<div class="input-group-prepend">
+									<div class="input-group-text">
+										<i class="fa-solid fa-key"></i>
 									</div>
 								</div>
 								<input type="password" id="password" name="password"
@@ -47,20 +59,15 @@
 									</div>
 								</div>
 								<input type="email" id="email" name="email"
-									th:value="${userDetail.email}"
+									th:value="${userDetail.email}" readonly
 									placeholder="Enter your email xyz@mail.com"
 									class="form-control" />
 							</div>
 
 							<div class="input-group mt-3">
-								<textarea name="about" id="description"
-									class="form-control" rows="10"
-									th:text="${userDetail.about}"
+								<textarea name="about" id="description" class="form-control"
+									rows="10" th:text="${userDetail.about}"
 									placeholder="Enter your brief description"></textarea>
-							</div>
-							<div class="container mt-2 text-center">
-								<img style="height: 200px; width: 200px;border-radius:50%;" src=""
-									th:src="@{'/img/'+${userDetail.imageUrl}}" alt="" />
 							</div>
 							<div class="custom-file mt-3">
 								<input type="file" class="form-control" name="profileImage" />

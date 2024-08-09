@@ -80,6 +80,11 @@
     	  tinymce.init({
         selector: '#description'
       });
+      
+      		$(() => {  
+			$('.common').removeClass("active");
+			$('#setting,#settingFont').addClass("active");
+		});
     </script>
 	</section>
 </body>

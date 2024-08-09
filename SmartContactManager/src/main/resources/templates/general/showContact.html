@@ -15,13 +15,13 @@
 				<!-- search field -->
 
 				<div class="search-container my-3">
-					<input onkeyup="search()" id="input-search" type="text" class="form-control"
-						placeholder="search your contacts" />
+					<input onkeyup="search()" id="input-search" type="text"
+						class="form-control" placeholder="search your contacts" />
 
 					<div class="search-result"></div>
 				</div>
 
-				<div class="tableDiv">
+				<div class="table-responsive">
 					<table class="table table-hover">
 						<thead>
 							<tr>
@@ -80,6 +80,13 @@
 				</div>
 			</div>
 		</div>
+
+		<script>
+		$(() => {  
+			$('.common').removeClass("active");
+			$('#viewContact,#viewContactFont').addClass("active");
+		});
+		</script>
 	</section>
 </body>
 </html>

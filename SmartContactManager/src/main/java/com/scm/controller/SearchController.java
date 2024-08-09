@@ -28,10 +28,8 @@ public class SearchController {
 	
 	@GetMapping("/name/{query}")
 	public ResponseEntity<?> search(@PathVariable("query") String q, Principal p){
-		System.out.println(q);
 		Users user = this.userRepository.getUsersByUserName(p.getName()).get();
 		List<Contact> contact = this.contactRepository.findByNameContainingAndUser(q, user);
-		System.out.println(contact);
 		return ResponseEntity.ok(contact);
 	}
 }

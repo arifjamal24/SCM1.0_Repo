@@ -13,13 +13,20 @@
 	href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
 	integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N"
 	crossorigin="anonymous">
-
-<title th:text="${title}">base page</title>
 <link rel="stylesheet" th:href="@{/css/style.css}" />
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
 	integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
 	crossorigin="anonymous" referrerpolicy="no-referrer" />
+	
+		<!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+	<script
+		src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+		integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+		crossorigin="anonymous"></script>
+
+<title th:text="${title}">base page</title>
+
 </head>
 
 <body>
@@ -35,9 +42,8 @@
 
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav ml-auto text-uppercase">
-				<li class="nav-item active"><a class="nav-link" th:href="@{/}">Home
-						<span class="sr-only">(current)</span>
-				</a></li>
+				<li class="nav-item active"><a class="nav-link" href="#"
+					th:href="@{/user/index}">Home</a></li>
 				<li class="nav-item"><a class="nav-link" href="#"><span
 						th:text="${userDetail.name}"></span></a></li>
 				<li class="nav-item"><a class="nav-link" th:href="@{/logout}">Logout</a></li>
@@ -49,19 +55,19 @@
 
 	<!-- sidebar -->
 	<div class="sidebar mt-2">
-		<span class="crossBtn" onclick="toggleSideBar()">&times;</span> <a
-			href="#" th:href="@{/user/index}" class="item"><i
-			class="fa-solid fa-house" style="color: #009688;"></i> Home</a> <a
-			href="#" th:href="@{/user/show-contacts/0}" class="item"><i
-			class="fa-solid fa-id-card-clip" style="color: #009688;"></i> View
-			Contacts</a> <a href="#" th:href="@{/user/add-contact}" class="item"><i
-			class="fa-solid fa-user-pen" style="color: #009688;"></i> Add Contact</a>
-		<a href="#" th:href="@{/user/user-profile}" class="item"><i class="fa-solid fa-user"
-			style="color: #009688;"></i> Your Profile</a> <a href="#" th:href="@{/user/user-profile-update}" class="item"><i
-			class="fa-solid fa-user-gear" style="color: #009688;"></i> Settings</a> <a
-			href="#" th:href="@{/logout}" class="item"><i
-			class="fa-solid fa-right-from-bracket" style="color: #009688;"></i>
-			Logout</a>
+		<span class="crossBtn" onclick="toggleSideBar()">&times;</span> 
+		<a id="home" href="#" th:href="@{/user/index}" class="item common">
+		<i id="homeFont" class="fa-solid fa-house common" style="color: #009688;"></i> Home</a> 
+		<a id="viewContact" href="#" th:href="@{/user/show-contacts/0}" class="item common">
+		<i id="viewContactFont" class="fa-solid fa-id-card-clip common" style="color: #009688;"></i> View Contacts</a>
+		<a id="addContact" href="#" th:href="@{/user/add-contact}" class="item common">
+		<i id="addContactFont" class="fa-solid fa-user-pen common" style="color: #009688;"></i> Add Contact</a>
+		<a id="userProfile" href="#" th:href="@{/user/user-profile}" class="item common">
+		<i id="userProfileFont" class="fa-solid fa-user common" style="color: #009688;"></i> Your Profile</a>
+		<a id="setting" href="#" th:href="@{/user/user-profile-update}" class="item common">
+		<i id="settingFont" class="fa-solid fa-user-gear common" style="color: #009688;"></i> Settings</a> 
+		<a href="#" th:href="@{/logout}" class="item">
+		<i class="fa-solid fa-right-from-bracket" style="color: #009688;"></i> Logout</a>
 		<div class="divider"></div>
 	</div>
 	<!-- END of sidebar -->
@@ -83,11 +89,7 @@
 
 	<!-- Optional JavaScript; choose one of the two! -->
 
-	<!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
-	<script
-		src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
-		integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-		crossorigin="anonymous"></script>
+
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
 		integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"

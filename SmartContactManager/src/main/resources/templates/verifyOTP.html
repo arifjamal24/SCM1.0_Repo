@@ -12,10 +12,17 @@
 				<div id="login-row"
 					class="row justify-content-center align-items-center">
 					<div id="login-column" class="col-md-6">
-						<div id="login-box" class="col-md-12" style="height: 250px;">
+						<div id="login-box" class="col-md-12" style="height: 270px;">
 							<div class="alert alert-success mt-2 text-center" role="alert">
-								<i class="fa-solid fa-check fa-xl"></i>&nbsp;&nbsp;&nbsp;
-								OTP sent to your registered email address
+								<i class="fa-solid fa-check fa-xl"></i>&nbsp;&nbsp;&nbsp; OTP
+								sent to your registered email address
+							</div>
+							<div th:if="${session.message}"
+								th:classappend="${'alert-'+session.message.type}"
+								class="alert text-center" role="alert">
+								<i class="fa-solid fa-triangle-exclamation"></i>&nbsp;&nbsp;&nbsp;<span
+									th:text="${session.message.content}"></span>
+								<th:block th:text="${@sessionHelper.removeMessageFromSession()}"></th:block>
 							</div>
 							<form id="login-form" class="form" th:action="@{/verifyOTPEmail}"
 								action="#" method="post">

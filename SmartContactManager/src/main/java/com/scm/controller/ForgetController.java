@@ -19,11 +19,11 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class ForgetController {
-	static Random random = new Random(100000); // minimum value ie. seed value
+	static Random random = new Random(); // minimum value ie. seed value
 
 	@Autowired
 	private EmailServices emailServices;
-	
+
 	@Autowired
 	private UserRepository userRepository;
 
@@ -35,21 +35,21 @@ public class ForgetController {
 	@PostMapping("/sendOTP")
 	public String sendOTP(@RequestParam("email") String email, HttpSession session) {
 		System.out.println("---" + email + "---");
-		
+
 		Optional<Users> user = this.userRepository.getUsersByUserName(email);
-		if(!user.isPresent()) {
-			session.setAttribute("message",
-					new Message("you are not our member. Please Register yourself", "danger"));
-			return "forgetEmailForm";	
+		if (!user.isPresent()) {
+			session.setAttribute("message", new Message("User does not exist. Please Register", "danger"));
+			return "forgetEmailForm";
 		}
-		
-		int otp = random.nextInt(999999); // max. value excluding this
+
+		long otp = random.nextLong(111111,999999); // max. value excluding this
 		String message = "<h4>SCM OTP: " + otp + "</h4>";
 		boolean status = true;
-				// this.emailServices.sendEmailWithHtml(email, "OTP Verification", message);
+		// this.emailServices.sendEmailWithHtml(email, "OTP Verification", message);
 		System.out.println("otp is " + otp);
 		if (status) {
 			session.setAttribute("otp", otp);
+			session.setAttribute("email",email);
 			return "verifyOTP";
 		} else {
 
@@ -57,7 +57,18 @@ public class ForgetController {
 					new Message("Something went wrong !! \n check your email address", "danger"));
 			return "forgetEmailForm";
 		}
+	}
 
-		// return "verifyOTP";
+	@PostMapping("/verifyOTPEmail")
+	public String verifyOTP(@RequestParam("otp") String otp, HttpSession session) {
+		String sessionOTP = session.getAttribute("otp").toString();
+		String email	  = session.getAttribute("email").toString();
+		if (otp.equals(sessionOTP)) {
+			
+			return "changePassword";
+		} else {
+			session.setAttribute("message", new Message("you have enter wrong otp", "danger"));
+			return "verifyOTP";
+		}
 	}
 }

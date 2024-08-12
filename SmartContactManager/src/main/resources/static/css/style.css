@@ -118,3 +118,10 @@ body {
 	background: #009688 !important;
 	color:white !important;
 }
+
+.aboutBanner{
+	background: linear-gradient(rgba(0, 0, 0, .8), rgba(0, 0, 0, .8)),
+		url(../img/about-banner.jpg);
+	background-size: cover;
+	color: black;
+}

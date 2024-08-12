@@ -1,7 +1,5 @@
 # Smart Contact Manager
 
-🚀 Thrilled to unveil my latest accomplishment! 🌐✨
-
 Presenting the Smart Contact Manager web application – a paradigm shift in contact management. 📇💼 Seamlessly organize, secure, and effortlessly access your contacts like never before. Harnessing an arsenal of cutting-edge tools, including Spring Boot, Spring Security, Spring ORM, JPA repository, Java, HTML, CSS, JavaScript, Thymeleaf, and more, we've meticulously crafted a user-centric solution that redefines efficiency and security.
 
 🔑 Fortified Security: Your data is our treasure. That's why we've implemented role-based authentication, email verification, and robust validation processes. Adding an extra layer of protection, our password encryption tool ensures your information remains truly confidential.

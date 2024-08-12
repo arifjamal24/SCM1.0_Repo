@@ -21,7 +21,6 @@ Presenting the Smart Contact Manager web application – a paradigm shift in con
 ![Capture4](https://github.com/user-attachments/assets/1e214ab0-2828-455b-ac2c-9c73f32f4b25)
 ![Capture5](https://github.com/user-attachments/assets/21c25eb1-12e1-4bed-b16a-d6691f8a9aa4)
 ![Capture6](https://github.com/user-attachments/assets/74b430a4-90c9-499b-8c4a-2ddfc51f773d)
-![Capture7](https://github.com/user-attachments/assets/7c470846-0016-4f20-b846-081c007aeaf9)
 ![Capture8](https://github.com/user-attachments/assets/8296b71b-6d8f-4e33-9d0a-23bfb429ee5e)
 ![Capture9](https://github.com/user-attachments/assets/636cb267-57d3-4bcf-8a3d-61171c50f591)
 ![Capture11](https://github.com/user-attachments/assets/4fbe029a-cfc0-4e24-858f-16add268c851)
